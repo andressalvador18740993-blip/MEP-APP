@@ -346,6 +346,23 @@ input[type="file"]{color:var(--text-dim);font-size:13px}
 .carousel-empty{background:var(--surface-1)}
 .carousel-empty .em{background:rgba(255,242,0,.08);border-color:rgba(255,242,0,.2);box-shadow:none}
 
+/* ---- botón flotante de evento destacado --------------------------------- */
+.evento-fab{position:fixed;right:clamp(14px,3vw,30px);bottom:calc(clamp(14px,3vw,30px) + env(safe-area-inset-bottom));z-index:90;display:flex;align-items:center;gap:12px;max-width:min(360px,calc(100vw - 28px));padding:11px 16px 11px 13px;background:var(--gold-400);color:#1a002b;border:1px solid rgba(0,0,0,.25);border-radius:var(--r-md);box-shadow:4px 4px 0 var(--purple-950);cursor:pointer;text-decoration:none;transition:transform var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease);}
+.evento-fab[hidden]{display:none!important}
+.evento-fab:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--purple-950)}
+.evento-fab:active{transform:translate(0,0);box-shadow:2px 2px 0 var(--purple-950)}
+.evento-fab:focus-visible{outline:2px solid var(--gold-400);outline-offset:3px}
+.evento-fab-ico{display:flex;align-items:center;justify-content:center;width:38px;height:38px;flex:none;background:var(--purple-600);border-radius:var(--r-sm);font-size:19px;line-height:1}
+.evento-fab-txt{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+.evento-fab-kicker{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;opacity:.72}
+.evento-fab-nombre{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.evento-fab .ico{flex:none;width:16px;height:16px}
+@media (max-width:560px){.evento-fab{left:14px;right:14px;max-width:none}.evento-fab .ico{margin-left:auto}}
+@media (prefers-reduced-motion:reduce){.evento-fab,.evento-fab:hover,.evento-fab:active{transform:none;transition:none}}
+.check-row{display:flex;align-items:center;gap:10px;margin:14px 0 4px;padding:12px 14px;background:var(--purple-950);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-sm);cursor:pointer;font-size:14px;font-weight:600;color:var(--text-dim);line-height:1.35}
+.check-row input[type="checkbox"]{width:18px;height:18px;flex:none;margin:0;accent-color:var(--gold-400);cursor:pointer}
+.check-row b{color:var(--gold-400)}
+
 /* ---- visor de imagen (lightbox) ----------------------------------------- */
 #lightbox{position:fixed;inset:0;z-index:400;display:none;background:rgba(6,0,12,.97)}
 #lightbox.open{display:flex;flex-direction:column}
@@ -630,6 +647,15 @@ body.lb-open{overflow:hidden}
       <div class="carousel-progress"><div class="carousel-progress-bar" id="carouselProgressBar"></div></div>
     </div>
     <div class="gal-grid" id="galGrid"></div>
+
+    <a class="evento-fab" id="eventoFab" href="#" target="_blank" rel="noopener noreferrer" hidden>
+      <span class="evento-fab-ico" id="eventoFabIco" aria-hidden="true">🔗</span>
+      <span class="evento-fab-txt">
+        <span class="evento-fab-kicker">Evento especial</span>
+        <span class="evento-fab-nombre" id="eventoFabNombre">Abrir evento</span>
+      </span>
+      <svg class="ico" aria-hidden="true"><use href="#i-external"/></svg>
+    </a>
   </section>
 
   <section id="view-inicio" class="view">
@@ -867,6 +893,10 @@ body.lb-open{overflow:hidden}
         <div><label>Icono (Emoji)</label><input id="s_icono" placeholder="📝" maxlength="4"></div>
         <div><label>URL</label><input id="s_url" placeholder="https://..."></div>
       </div>
+      <label class="check-row" for="s_destacado">
+        <input type="checkbox" id="s_destacado">
+        <span><b>Destacar en la galería</b> — muestra un botón flotante que abre esta sub-app en una pestaña nueva.</span>
+      </label>
       <div class="row">
         <button class="btn primary" id="s_save"><svg class="ico"><use href="#i-plus"/></svg>Agregar</button>
         <button class="btn" id="s_cancel" style="display:none"><svg class="ico"><use href="#i-x"/></svg>Cancelar</button>
