@@ -991,10 +991,16 @@ function appendMensaje(box, m, admin) {
   if (alFinal) box.scrollTop = box.scrollHeight;
 }
 
+function sanitizarChatPublico(texto) {
+  // Restringe caracteres especiales/emoji: deja letras, números, espacios y puntuación básica.
+  return String(texto || '').replace(new RegExp("[^\\p{L}\\p{N}\\s.,;:!?¿¡()_'\"+-]", 'gu'), '').trim();
+}
+
 async function enviarMensaje(texto, input) {
   if (!currentUser) { toast('Inicia sesión para escribir', 'err'); return; }
   if (!texto) return;
-  const textoLimpio = texto.trim().slice(0, 600);
+  let textoLimpio = texto.trim().slice(0, 600);
+  if (chatModo.tipo === 'publico') textoLimpio = sanitizarChatPublico(textoLimpio);
   if (!textoLimpio) return;
 
   const payload = { user_id: currentUser.id, texto: textoLimpio };
