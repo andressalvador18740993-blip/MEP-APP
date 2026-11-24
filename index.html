@@ -347,16 +347,14 @@ input[type="file"]{color:var(--text-dim);font-size:13px}
 .carousel-empty .em{background:rgba(255,242,0,.08);border-color:rgba(255,242,0,.2);box-shadow:none}
 
 /* ---- botón de evento especial (en el topbar) ---------------------------- */
-#eventoFab{display:inline-flex;align-items:center;gap:8px;flex:none;margin:0 2px;max-width:min(320px,44%);padding:7px 12px;background:var(--gold-400);color:#1a002b;border:1px solid rgba(0,0,0,.22);border-radius:var(--r-md);font-size:12px;font-weight:800;text-decoration:none;line-height:1.2;transition:all var(--dur-fast) var(--ease);}
+#eventoFab{display:inline-flex;align-items:center;gap:10px;flex:none;margin:0 2px;padding:8px 16px;background:var(--gold-400);color:#1a002b;border:1px solid rgba(0,0,0,.22);border-radius:var(--r-sm);font-size:14px;font-weight:800;letter-spacing:.2px;text-decoration:none;line-height:1.2;white-space:nowrap;transition:all var(--dur-fast) var(--ease);}
 #eventoFab[hidden]{display:none!important}
 #eventoFab:hover{background:var(--gold-500);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.35)}
 #eventoFab:active{transform:translateY(0);background:var(--gold-500)}
 #eventoFab:focus-visible{outline:2px solid #1a002b;outline-offset:2px}
 .evento-fab-ico{display:flex;align-items:center;justify-content:center;width:30px;height:30px;flex:none;background:var(--purple-700);border-radius:var(--r-sm);font-size:15px;line-height:1}
-.evento-fab-txt{display:flex;flex-direction:column;min-width:0;line-height:1.2}
-.evento-fab-kicker{font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;opacity:.8}
-.evento-fab-nombre{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
-#eventoFab .ico{flex:none;width:14px;height:14px}
+.evento-fab-nombre{font-size:14px;font-weight:800;white-space:nowrap}
+#eventoFab .ico{flex:none;width:15px;height:15px}
 @media (prefers-reduced-motion:reduce){#eventoFab,#eventoFab:hover{transition:none;transform:none}}
 .check-row{display:flex;align-items:center;gap:10px;margin:14px 0 4px;padding:12px 14px;background:var(--purple-950);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-sm);cursor:pointer;font-size:14px;font-weight:600;color:var(--text-dim);line-height:1.35}
 .check-row input[type="checkbox"]{width:18px;height:18px;flex:none;margin:0;accent-color:var(--gold-400);cursor:pointer}
@@ -413,9 +411,9 @@ body.lb-open{overflow:hidden}
   #btnProfile .profile-texts{display:none}
   #topbarAvatar{width:32px;height:32px}
   #btnLogout{width:40px;height:40px;padding:0;justify-content:center}
-  #eventoFab{padding:7px 9px;gap:6px;max-width:none}
-  #eventoFab .evento-fab-txt{display:none}
-  #eventoFab .ico{display:none}
+  #eventoFab{padding:6px 10px;gap:7px;font-size:12.5px}
+  #eventoFab .evento-fab-ico{width:26px;height:26px;font-size:13px}
+  #eventoFab .ico{width:13px;height:13px}
   #view-galeria .carousel-wrap{height:clamp(340px,60svh,520px);margin-left:-16px;margin-right:-16px;margin-bottom:16px}
   .carousel-slide img,.carousel-slide video,.slide-media img,.slide-media video{object-fit:contain}
   .carousel-caption{padding:16px 16px 54px}
@@ -517,10 +515,7 @@ body.lb-open{overflow:hidden}
 
   <a class="evento-fab" id="eventoFab" href="#" target="_blank" rel="noopener noreferrer" hidden>
     <span class="evento-fab-ico" id="eventoFabIco" aria-hidden="true">🔗</span>
-    <span class="evento-fab-txt">
-      <span class="evento-fab-kicker">Evento especial</span>
-      <span class="evento-fab-nombre" id="eventoFabNombre">Abrir evento</span>
-    </span>
+    <span class="evento-fab-nombre" id="eventoFabNombre">Censo MEP2026</span>
     <svg class="ico" aria-hidden="true"><use href="#i-external"/></svg>
   </a>
 
