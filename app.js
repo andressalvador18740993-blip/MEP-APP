@@ -456,13 +456,32 @@ function aplicarSidebarColapsada() {
 function renderNavSubapps() {
   const cont = $('navSubapps');
   if (!cont) return;
-  cont.innerHTML = DB.subapps.length
-    ? DB.subapps.map((s) => `
+  // Las sub-apps destacadas viven en el botón flotante de la galería, no en el menú.
+  const visibles = DB.subapps.filter((s) => !s.destacado);
+  cont.innerHTML = visibles.length
+    ? visibles.map((s) => `
         <div class="nav-item" data-subapp="${esc(s.id)}" role="button" tabindex="0">
           <span style="font-size:16px;line-height:1;width:18px;text-align:center;flex:none" aria-hidden="true">${esc(s.icono || '🔗')}</span>
           <span class="label">${esc(s.nombre || 'Sub-app')}</span>
         </div>`).join('')
     : '<div class="nav-item" style="opacity:.5;font-size:13px"><span class="label">Sin sub-apps</span></div>';
+}
+
+function renderEventoFab() {
+  const fab = $('eventoFab');
+  if (!fab) return;
+  const ev = DB.subapps.find((s) => s.destacado && s.activo !== false);
+  const url = ev ? safeUrl(ev.url) : null;
+  if (!ev || !url) {
+    fab.hidden = true;
+    fab.removeAttribute('href');
+    return;
+  }
+  fab.href = url;
+  fab.title = `Abrir ${ev.nombre || 'evento'} en una pestaña nueva`;
+  $('eventoFabIco').textContent = ev.icono || '🔗';
+  $('eventoFabNombre').textContent = ev.nombre || 'Abrir evento';
+  fab.hidden = false;
 }
 
 function itemAgenda(a, conFecha) {
@@ -1278,7 +1297,7 @@ function renderAdminListas() {
   if (s) s.innerHTML = DB.subapps.length ? DB.subapps.map((x) => `
     <div class="ad-row">
       <div class="thumb" style="display:flex;align-items:center;justify-content:center;font-size:24px;background:transparent;border-color:var(--glass-border-subtle)">${esc(x.icono || '🔗')}</div>
-      <div class="ad-txt"><b>${esc(x.nombre || '')}</b><small>${esc(x.url || '')}</small></div>
+      <div class="ad-txt"><b>${esc(x.nombre || '')}${x.destacado ? ' <span style="font-size:10px;color:var(--gold-500)">[Destacada]</span>' : ''}</b><small>${esc(x.url || '')}</small></div>
       <button type="button" class="btn sm icon" data-action="edit" data-type="subapps" data-id="${esc(x.id)}" aria-label="Editar"><svg class="ico" aria-hidden="true"><use href="#i-pencil"/></svg></button>
       <button type="button" class="btn sm icon danger" data-action="del" data-type="subapps" data-id="${esc(x.id)}" aria-label="Eliminar"><svg class="ico" aria-hidden="true"><use href="#i-trash"/></svg></button>
     </div>`).join('') : '<p class="muted">Sin sub-apps.</p>';
@@ -1315,6 +1334,7 @@ async function limpiarForm(type) {
   }
   if (type === 'subapps') {
     ['s_nombre', 's_icono', 's_url'].forEach((i) => { $(i).value = ''; });
+    if ($('s_destacado')) $('s_destacado').checked = false;
     setEtiquetaBoton('s_save', 'Agregar');
     $('s_cancel').style.display = 'none';
   }
@@ -1373,6 +1393,7 @@ function cargarParaEditar(type, id) {
     $('s_nombre').value = it.nombre || '';
     $('s_icono').value = it.icono || '';
     $('s_url').value = it.url || '';
+    if ($('s_destacado')) $('s_destacado').checked = !!it.destacado;
     setEtiquetaBoton('s_save', 'Actualizar');
     $('s_cancel').style.display = 'inline-flex';
   }
@@ -1507,19 +1528,35 @@ async function guardarReglamento() {
   }
 }
 
+function normalizarUrlSubapp(valor) {
+  let u = String(valor || '').trim();
+  if (!u) return '';
+  if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+  try {
+    const x = new URL(u);
+    x.hostname = x.hostname.replace(/\.+$/, '');
+    return x.toString();
+  } catch { return u; }
+}
+
 async function guardarSubapp() {
   const nombre = $('s_nombre').value.trim();
-  const url = $('s_url').value.trim();
-  if (!nombre || !url) { toast('Escribe nombre y URL', 'err'); return; }
+  const url = safeUrl(normalizarUrlSubapp($('s_url').value));
+  if (!nombre || !url) { toast('Escribe el nombre y una URL válida', 'err'); return; }
 
   const payload = {
     nombre,
     icono: $('s_icono').value.trim() || '🔗',
     url,
-    activo: true
+    activo: true,
+    destacado: !!$('s_destacado').checked
   };
 
   try {
+    if (payload.destacado) {
+      const otras = DB.subapps.filter((x) => x.destacado && x.id !== editando.subapps);
+      await Promise.all(otras.map((x) => pb.collection('subapps').update(x.id, { destacado: false })));
+    }
     if (editando.subapps) {
       await pb.collection('subapps').update(editando.subapps, payload);
     } else {
@@ -1573,7 +1610,9 @@ function abrirSubapp(id) {
 
 function abrirPrimeraSubapp() {
   if (!DB.subapps.length) { toast('Todavía no hay sub-apps configuradas'); return; }
-  abrirSubapp(DB.subapps[0].id);
+  const normal = DB.subapps.find((s) => !s.destacado && s.activo !== false) || DB.subapps.find((s) => !s.destacado);
+  if (!normal) { toast('La sub-app está disponible en el botón de la galería'); return; }
+  abrirSubapp(normal.id);
 }
 
 /* ------------------------------------------------------------ eventos */
@@ -2131,6 +2170,7 @@ function mostrarTerminos() {
 /* -------------------------------------------------------------- arranque */
 function renderTodo() {
   renderNavSubapps();
+  renderEventoFab();
   renderInicio();
   renderAgenda();
   renderReglamentos();
