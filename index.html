@@ -47,7 +47,7 @@ a{color:inherit;text-decoration:none} img,video,iframe{display:block;max-width:1
 .topbar::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1.5px; background:linear-gradient(90deg, transparent 0%, var(--gold-500) 30%, var(--gold-400) 70%, transparent 100%); opacity:0.7;}
 .icon-btn{background:rgba(255, 183, 0, 0.08);border:1px solid var(--glass-border-subtle); color:var(--gold-400);width:46px;height:46px; border-radius:var(--r-md);cursor:pointer; display:inline-flex;align-items:center;justify-content:center;flex:none; transition:all var(--dur-fast) var(--ease);}
 .icon-btn:hover{background:rgba(255, 183, 0, 0.18);border-color:var(--glass-border);transform:translateY(-2px);box-shadow:var(--shadow-gold)} .icon-btn:active{transform:translateY(0) scale(0.95)}
-.brand{display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none;flex:1;min-width:0; overflow:hidden;}
+.brand{display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none;flex:1;overflow:hidden;}
 .brand-logo{height: 52px; width: auto; max-width: 160px; object-fit: contain; flex: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #fff; padding: 2px;}
 .brand-text-wrap { display: flex; flex-direction: column; min-width: 0; }
 .brand-txt{font-weight:800;font-size:16px;letter-spacing:-0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff} .brand-sub{font-size:11px;color:var(--gold-300);font-weight:700;display:block;line-height:1.2;letter-spacing:1px;text-transform:uppercase;margin-top:3px}
@@ -347,13 +347,13 @@ input[type="file"]{color:var(--text-dim);font-size:13px}
 .carousel-empty .em{background:rgba(255,242,0,.08);border-color:rgba(255,242,0,.2);box-shadow:none}
 
 /* ---- botón de evento especial (en el topbar) ---------------------------- */
-#eventoFab{display:inline-flex;align-items:center;gap:10px;flex:none;margin:0 2px;padding:8px 16px;background:var(--gold-400);color:#1a002b;border:1px solid rgba(0,0,0,.22);border-radius:var(--r-sm);font-size:14px;font-weight:800;letter-spacing:.2px;text-decoration:none;line-height:1.2;white-space:nowrap;transition:all var(--dur-fast) var(--ease);}
+#eventoFab{display:inline-flex;align-items:center;gap:10px;flex:0 1 auto;min-width:0;margin:0 2px;padding:8px 16px;background:var(--gold-400);color:#1a002b;border:1px solid rgba(0,0,0,.22);border-radius:var(--r-sm);font-size:14px;font-weight:800;letter-spacing:.2px;text-decoration:none;line-height:1.2;white-space:nowrap;transition:all var(--dur-fast) var(--ease);}
 #eventoFab[hidden]{display:none!important}
 #eventoFab:hover{background:var(--gold-500);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.35)}
 #eventoFab:active{transform:translateY(0);background:var(--gold-500)}
 #eventoFab:focus-visible{outline:2px solid #1a002b;outline-offset:2px}
 .evento-fab-ico{display:flex;align-items:center;justify-content:center;width:30px;height:30px;flex:none;background:var(--purple-700);border-radius:var(--r-sm);font-size:15px;line-height:1}
-.evento-fab-nombre{font-size:14px;font-weight:800;white-space:nowrap}
+.evento-fab-nombre{font-size:14px;font-weight:800;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
 #eventoFab .ico{flex:none;width:15px;height:15px}
 @media (prefers-reduced-motion:reduce){#eventoFab,#eventoFab:hover{transition:none;transform:none}}
 .check-row{display:flex;align-items:center;gap:10px;margin:14px 0 4px;padding:12px 14px;background:var(--purple-950);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-sm);cursor:pointer;font-size:14px;font-weight:600;color:var(--text-dim);line-height:1.35}
@@ -398,10 +398,12 @@ body.lb-open{overflow:hidden}
 }
 @media (max-width:640px){
   :root{--topbar-h:64px}
-  .topbar{gap:10px}
+  .topbar{gap:6px;padding:0 10px}
   .brand-txt{font-size:13px;white-space:normal;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .brand-sub{display:none}
   .brand-logo{height:36px;max-width:104px}
+  #btnMenu{width:40px;height:40px}
+  .brand{min-width:104px}
   .admin-btn{padding:9px 12px;font-size:12.5px}
   .admin-btn .ico{width:15px;height:15px}
   #btnLogin span{display:none}
@@ -411,9 +413,10 @@ body.lb-open{overflow:hidden}
   #btnProfile .profile-texts{display:none}
   #topbarAvatar{width:32px;height:32px}
   #btnLogout{width:40px;height:40px;padding:0;justify-content:center}
-  #eventoFab{padding:6px 10px;gap:7px;font-size:12.5px}
-  #eventoFab .evento-fab-ico{width:26px;height:26px;font-size:13px}
+  #eventoFab{padding:6px 10px;gap:6px;font-size:12.5px}
+  #eventoFab .evento-fab-ico{width:24px;height:24px;font-size:13px}
   #eventoFab .ico{width:13px;height:13px}
+  .evento-fab-nombre{font-size:12.5px}
   #view-galeria .carousel-wrap{height:clamp(340px,60svh,520px);margin-left:-16px;margin-right:-16px;margin-bottom:16px}
   .carousel-slide img,.carousel-slide video,.slide-media img,.slide-media video{object-fit:contain}
   .carousel-caption{padding:16px 16px 54px}
@@ -444,7 +447,8 @@ body.lb-open{overflow:hidden}
 }
 @media (max-width:380px){
   .brand-txt{display:none}
-  .brand-logo{height:34px}
+  .brand-logo{height:32px}
+  .brand{min-width:91px}
 }
 @media (min-width:1280px){
   .gal-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
